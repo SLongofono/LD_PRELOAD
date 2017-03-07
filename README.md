@@ -8,4 +8,5 @@ trick.
 Following sources were used for writing this example:
 
 http://www.linuxjournal.com/article/7795
-https://rafalcieslak.wordpress.com/2013/04/02/dynamic-linker-tricks-using-ld\_preload-to-cheat-inject-features-and-investigate-programs
+
+https://rafalcieslak.wordpress.com/2013/04/02/dynamic-linker-tricks-using-ld_preload-to-cheat-inject-features-and-investigate-programs
