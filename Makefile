@@ -12,8 +12,10 @@ NCC   :=\033[0m
 DIR   := ${CURDIR}
 C_APP := $(wildcard app/*.c)
 C_LIB := $(wildcard lib/*.c)
-S_LIB := custom_lib.so
+S_LIB := custom_cuda.so
 S_APP := test
+CXX   := g++
+I_PTH := /usr/local/cuda-8.0/include
 
 all: build
 
@@ -24,12 +26,12 @@ build: $(S_LIB) $(S_APP)
 
 $(S_LIB): $(C_LIB)
 	@echo "$(RED)\c"
-	gcc -shared -fPIC $< -o $@ -ldl
+	$(CXX) -I$(I_PTH) -shared -fPIC $< -o $@ -ldl
 	@echo "$(NCC)\c"
 
 $(S_APP): $(C_APP)
 	@echo "$(RED)\c"
-	gcc $< -o $@
+	$(CXX) $< -o $@
 	@echo "$(NCC)\c"
 
 run: $(S_LIB) $(S_APP)
