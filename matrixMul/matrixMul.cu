@@ -32,9 +32,11 @@
 // CUDA runtime
 #include <cuda_runtime.h>
 
+#if 0
 // Helper functions and utilities to work with CUDA
 #include <helper_functions.h>
 #include <helper_cuda.h>
+#endif
 
 /**
  * Matrix multiplication (CUDA Kernel) on the device: C = A * B
@@ -274,6 +276,15 @@ int matrixMultiply(int argc, char **argv, int block_size, dim3 &dimsA, dim3 &dim
         exit(EXIT_FAILURE);
     }
 
+    // Synchronize with the device
+    error = cudaDeviceSynchronize ();
+
+    if (error != cudaSuccess)
+    {
+        fprintf(stderr, "Failed to synchronize with the device!\n");
+        exit(EXIT_FAILURE);
+    }
+
     // Wait for the stop event to complete
     error = cudaEventSynchronize(stop);
 
@@ -363,25 +374,8 @@ int main(int argc, char **argv)
 {
     // printf("[Matrix Multiply Using CUDA] - Starting...\n");
 
-    if (checkCmdLineFlag(argc, (const char **)argv, "help") ||
-        checkCmdLineFlag(argc, (const char **)argv, "?"))
-    {
-        printf("Usage -device=n (n >= 0 for deviceID)\n");
-        printf("      -wA=WidthA -hA=HeightA (Width x Height of Matrix A)\n");
-        printf("      -wB=WidthB -hB=HeightB (Width x Height of Matrix B)\n");
-        printf("  Note: Outer matrix dimensions of A & B matrices must be equal.\n");
-
-        exit(EXIT_SUCCESS);
-    }
-
     // By default, we use device 0, otherwise we override the device ID based on what is provided at the command line
     int devID = 0;
-
-    if (checkCmdLineFlag(argc, (const char **)argv, "device"))
-    {
-        devID = getCmdLineArgumentInt(argc, (const char **)argv, "device");
-        cudaSetDevice(devID);
-    }
 
     cudaError_t error;
     cudaDeviceProp deviceProp;
@@ -414,37 +408,6 @@ int main(int argc, char **argv)
 
     dim3 dimsA(5*20*block_size, 5*20*block_size, 1);
     dim3 dimsB(5*40*block_size, 5*20*block_size, 1);
-
-    // width of Matrix A
-    if (checkCmdLineFlag(argc, (const char **)argv, "wA"))
-    {
-        dimsA.x = getCmdLineArgumentInt(argc, (const char **)argv, "wA");
-    }
-
-    // height of Matrix A
-    if (checkCmdLineFlag(argc, (const char **)argv, "hA"))
-    {
-        dimsA.y = getCmdLineArgumentInt(argc, (const char **)argv, "hA");
-    }
-
-    // width of Matrix B
-    if (checkCmdLineFlag(argc, (const char **)argv, "wB"))
-    {
-        dimsB.x = getCmdLineArgumentInt(argc, (const char **)argv, "wB");
-    }
-
-    // height of Matrix B
-    if (checkCmdLineFlag(argc, (const char **)argv, "hB"))
-    {
-        dimsB.y = getCmdLineArgumentInt(argc, (const char **)argv, "hB");
-    }
-
-    if (dimsA.x != dimsB.y)
-    {
-        printf("Error: outer matrix dimensions must be equal. (%d != %d)\n",
-               dimsA.x, dimsB.y);
-        exit(EXIT_FAILURE);
-    }
 
     printf("MatrixA(%d,%d), MatrixB(%d,%d)\n", dimsA.x, dimsA.y, dimsB.x, dimsB.y);
 

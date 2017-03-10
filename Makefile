@@ -19,7 +19,7 @@ I_PTH := /usr/local/cuda-8.0/include
 
 all: build
 
-build: $(S_LIB) $(S_APP)
+build: $(S_LIB)
 	@echo "$(RED)\c"
 	@echo "Build Complete!"
 	@echo "$(NCC)\c"
@@ -41,5 +41,5 @@ run: $(S_LIB) $(S_APP)
 
 clean:
 	@echo "$(RED)\c"
-	rm -f $(S_LIB) $(S_APP)
+	rm -f $(S_LIB)
 	@echo "$(NCC)\c"

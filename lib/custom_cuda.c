@@ -21,12 +21,13 @@
 #define PRINT(func, statement)
 #endif
 
-#define PRINT_LAUNCH_CTL(x)
+#define PRINT_LAUNCH_CTL(x)	x
 #define PRINT_CONFIG_CTL(x)	
-#define PRINT_SETUP_CTL(x)
-#define PRINT_SYNCH_CTL(x)
+#define PRINT_SETUP_CTL(x)	
+#define PRINT_SYNCH_CTL(x)	x
 #define PRINT_STREAM_CTL(x)	x
-#define PRINT_REGTR_CTL(x)
+#define PRINT_EVENT_CTL(x)	x
+#define PRINT_REGTR_CTL(x)	
 
 /* Create typedefs to the target CUDA APIs */
 typedef cudaError_t	(*cudaLaunch_t)(const char*);
@@ -34,6 +35,7 @@ typedef cudaError_t	(*cudaConfigureCall_t)(dim3, dim3, size_t, cudaStream_t);
 typedef cudaError_t	(*cudaSetupArgument_t)(const void*, size_t, size_t);
 typedef cudaError_t	(*cudaDeviceSynchronize_t)(void);
 typedef cudaError_t	(*cudaStreamSynchronize_t)(cudaStream_t stream);
+typedef cudaError_t	(*cudaEventSynchronize_t)(cudaEvent_t event);
 typedef void		(*cudaRegisterFunction_t)(void**, const char*, char*,
 						  const char*, int, uint3*,
 						  uint3*, dim3*, dim3*,
@@ -45,6 +47,7 @@ static cudaConfigureCall_t 	orig_cudaConfigureCall = NULL;
 static cudaSetupArgument_t	orig_cudaSetupArgument = NULL;
 static cudaDeviceSynchronize_t	orig_cudaDeviceSynchronize = NULL;
 static cudaStreamSynchronize_t	orig_cudaStreamSynchronize = NULL;
+static cudaEventSynchronize_t	orig_cudaEventSynchronize = NULL;
 static cudaRegisterFunction_t 	orig_cudaRegisterFunction = NULL;
 
 /* Declare a global dictionary for keeping track of CUDA kernels */
@@ -158,6 +161,8 @@ cudaError_t cudaSetupArgument (const void	*arg,
 extern "C"
 cudaError_t cudaDeviceSynchronize (void)
 {
+	cudaError_t ret = cudaSuccess;
+
 	if (!orig_cudaDeviceSynchronize) {
 		/* Get the pointer to the CUDA-defined synchronize function */
 		orig_cudaDeviceSynchronize = (cudaDeviceSynchronize_t) dlsym (RTLD_NEXT, "cudaDeviceSynchronize");
@@ -166,8 +171,14 @@ cudaError_t cudaDeviceSynchronize (void)
 	/* Print the invocation message */
 	PRINT (SYNCH_CTL, std::cout << "Synchronizing with the device...\n");
 
+	/* Wait for the synch to complete */
+	ret = orig_cudaDeviceSynchronize ();
+
+	/* Print the invocation message */
+	PRINT (SYNCH_CTL, std::cout << "Synchronization complete!\n");
+
 	/* Call the original cuda synchronize function */
-	return orig_cudaDeviceSynchronize ();
+	return ret;
 }
 
 /*
@@ -184,11 +195,36 @@ cudaError_t cudaStreamSynchronize (cudaStream_t stream)
 		orig_cudaStreamSynchronize = (cudaStreamSynchronize_t) dlsym (RTLD_NEXT, "cudaStreamSynchronize");
 	}
 
+	std::cout << "Stream Synch!\n";
+
 	/* Print the invocation message */
 	PRINT (STREAM_CTL, std::cout << "Synchronizing with the stream...\n");
 
 	/* Call the original cuda stream synchronization function */
 	return orig_cudaStreamSynchronize (stream);
+}
+
+/*
+ * cudaEventSynchronize
+ *
+ * @event		: Event identifier
+ * $cudaError_t		: Enumerated type specifying the CUDA error
+ */
+cudaError_t cudaEventSynchronize (cudaEvent_t event)
+{
+	if (!orig_cudaEventSynchronize) {
+		/* Get the pointer to the CUDA-defined event synchronization
+		 * function */
+		orig_cudaEventSynchronize = (cudaEventSynchronize_t) dlsym (RTLD_NEXT, "cudaEventSynchronize");
+	}
+
+	std::cout << "Event Synch!\n";
+
+	/* Print the invocation message */
+	PRINT (EVENT_CTL, std::cout << "Synchronizing with the event...\n");
+
+	/* Call the original cuda event synchronize function */
+	return orig_cudaEventSynchronize (event);
 }
 
 /*

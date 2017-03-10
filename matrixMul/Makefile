@@ -199,12 +199,13 @@ ALL_CCFLAGS += $(addprefix -Xcompiler ,$(EXTRA_CCFLAGS))
 SAMPLE_ENABLED := 1
 
 ALL_LDFLAGS :=
+ALL_LDFLAGS += --cudart shared
 ALL_LDFLAGS += $(ALL_CCFLAGS)
 ALL_LDFLAGS += $(addprefix -Xlinker ,$(LDFLAGS))
 ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))
 
 # Common includes and paths for CUDA
-INCLUDES  := -I../../common/inc
+INCLUDES  := -Iinc
 LIBRARIES :=
 
 ################################################################################
