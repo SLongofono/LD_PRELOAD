@@ -1,0 +1,8 @@
+==2931== NVPROF is profiling process 2931, command: ./matrixMul
+==2931== Warning: Unified Memory Profiling is not supported on the underlying platform. System requirements for unified memory can be found at: http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-requirements
+==2931== Profiling application: ./matrixMul
+==2931== Profiling result:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 94.88%  2.66566s         1  2.66566s  2.66566s  2.66566s  void matrixMulCUDA<int=32>(float*, float*, float*, int, int)
+  3.21%  90.231ms         1  90.231ms  90.231ms  90.231ms  [CUDA memcpy DtoH]
+  1.91%  53.647ms         2  26.824ms  17.791ms  35.856ms  [CUDA memcpy HtoD]

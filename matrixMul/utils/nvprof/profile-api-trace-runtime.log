@@ -1,0 +1,23 @@
+==2595== NVPROF is profiling process 2595, command: ./matrixMul
+==2595== Warning: Unified Memory Profiling is not supported on the underlying platform. System requirements for unified memory can be found at: http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-requirements
+==2595== Profiling application: ./matrixMul
+==2595== Profiling result:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 94.87%  2.66625s         1  2.66625s  2.66625s  2.66625s  void matrixMulCUDA<int=32>(float*, float*, float*, int, int)
+  3.21%  90.136ms         1  90.136ms  90.136ms  90.136ms  [CUDA memcpy DtoH]
+  1.92%  54.050ms         2  27.025ms  17.847ms  36.203ms  [CUDA memcpy HtoD]
+
+==2595== API calls:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 88.89%  2.66629s         1  2.66629s  2.66629s  2.66629s  cudaEventSynchronize
+  6.18%  185.27ms         3  61.757ms  500.36us  184.25ms  cudaMalloc
+  4.92%  147.70ms         3  49.233ms  19.508ms  91.557ms  cudaMemcpy
+  0.00%  144.84us         3  48.281us  24.011us  94.635us  cudaFree
+  0.00%  91.406us         1  91.406us  91.406us  91.406us  cudaLaunch
+  0.00%  62.864us         2  31.432us  24.479us  38.385us  cudaEventRecord
+  0.00%  27.760us         2  13.880us  3.2290us  24.531us  cudaEventCreate
+  0.00%  25.781us         1  25.781us  25.781us  25.781us  cudaGetDeviceProperties
+  0.00%  24.948us         1  24.948us  24.948us  24.948us  cudaGetDevice
+  0.00%  12.448us         1  12.448us  12.448us  12.448us  cudaEventElapsedTime
+  0.00%  5.4170us         1  5.4170us  5.4170us  5.4170us  cudaConfigureCall
+  0.00%  5.0530us         5  1.0100us     625ns  1.6670us  cudaSetupArgument

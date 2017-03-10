@@ -1,0 +1,16 @@
+==2616== NVPROF is profiling process 2616, command: ./matrixMul
+==2616== Warning: Unified Memory Profiling is not supported on the underlying platform. System requirements for unified memory can be found at: http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-requirements
+==2616== Profiling application: ./matrixMul
+==2616== Profiling result:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 94.83%  2.66439s         1  2.66439s  2.66439s  2.66439s  void matrixMulCUDA<int=32>(float*, float*, float*, int, int)
+  3.25%  91.261ms         1  91.261ms  91.261ms  91.261ms  [CUDA memcpy DtoH]
+  1.92%  53.935ms         2  26.967ms  17.932ms  36.003ms  [CUDA memcpy HtoD]
+
+==2616== API calls:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 83.15%  76.093us        91     836ns     416ns  15.000us  cuDeviceGetAttribute
+  7.68%  7.0300us         3  2.3430us     781ns  4.6870us  cuDeviceGetCount
+  5.12%  4.6880us         1  4.6880us  4.6880us  4.6880us  cuDeviceTotalMem
+  2.62%  2.3950us         3     798ns     677ns     989ns  cuDeviceGet
+  1.42%  1.3020us         1  1.3020us  1.3020us  1.3020us  cuDeviceGetName

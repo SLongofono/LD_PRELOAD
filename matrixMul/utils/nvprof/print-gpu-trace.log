@@ -1,0 +1,13 @@
+==2952== NVPROF is profiling process 2952, command: ./matrixMul
+==2952== Warning: Unified Memory Profiling is not supported on the underlying platform. System requirements for unified memory can be found at: http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-requirements
+==2952== Profiling application: ./matrixMul
+==2952== Profiling result:
+   Start  Duration            Grid Size      Block Size     Regs*    SSMem*    DSMem*      Size  Throughput           Device   Context    Stream  Name
+554.80ms  17.904ms                    -               -         -         -         -  39.063MB  2.1307GB/s  NVIDIA Tegra X1         1         7  [CUDA memcpy HtoD]
+573.13ms  35.959ms                    -               -         -         -         -  78.125MB  2.1217GB/s  NVIDIA Tegra X1         1         7  [CUDA memcpy HtoD]
+609.28ms  2.66606s          (200 100 1)       (32 32 1)        28  8.0000KB        0B         -           -  NVIDIA Tegra X1         1         7  void matrixMulCUDA<int=32>(float*, float*, float*, int, int) [116]
+3.27554s  90.586ms                    -               -         -         -         -  78.125MB  862.44MB/s  NVIDIA Tegra X1         1         7  [CUDA memcpy DtoH]
+
+Regs: Number of registers used per CUDA thread. This number includes registers used internally by the CUDA driver and/or tools and can be more than what the compiler shows.
+SSMem: Static shared memory allocated per CUDA block.
+DSMem: Dynamic shared memory allocated per CUDA block.

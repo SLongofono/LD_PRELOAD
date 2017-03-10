@@ -1,0 +1,3 @@
+MatrixA(3200,3200), MatrixB(6400,3200)
+Performance= 48.74 GFlop/s, Time= 2689.371 msec, Size= 131072000000 Ops, WorkgroupSize= 1024 threads/block
+Result = PASS

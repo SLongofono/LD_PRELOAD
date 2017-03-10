@@ -1,0 +1,28 @@
+==2784== NVPROF is profiling process 2784, command: ./matrixMul
+==2784== Warning: Unified Memory Profiling is not supported on the underlying platform. System requirements for unified memory can be found at: http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-requirements
+==2784== Profiling application: ./matrixMul
+==2784== Profiling result:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 94.89%  2.66313s         1  2.66313s  2.66313s  2.66313s  void matrixMulCUDA<int=32>(float*, float*, float*, int, int)
+  3.19%  89.464ms         1  89.464ms  89.464ms  89.464ms  [CUDA memcpy DtoH]
+  1.92%  53.958ms         2  26.979ms  17.902ms  36.055ms  [CUDA memcpy HtoD]
+
+==2784== API calls:
+Time(%)      Time     Calls       Avg       Min       Max  Name
+ 89.61%  2.66318s         1  2.66318s  2.66318s  2.66318s  cudaEventSynchronize
+  5.43%  161.46ms         3  53.820ms  479.53us  160.48ms  cudaMalloc
+  4.94%  146.85ms         3  48.951ms  19.569ms  90.796ms  cudaMemcpy
+  0.00%  147.29us         3  49.097us  25.000us  95.573us  cudaFree
+  0.00%  94.896us         1  94.896us  94.896us  94.896us  cudaLaunch
+  0.00%  81.663us        91     897ns     468ns  14.844us  cuDeviceGetAttribute
+  0.00%  62.708us         2  31.354us  24.271us  38.437us  cudaEventRecord
+  0.00%  29.010us         2  14.505us  3.5420us  25.468us  cudaEventCreate
+  0.00%  26.042us         1  26.042us  26.042us  26.042us  cudaGetDeviceProperties
+  0.00%  25.521us         1  25.521us  25.521us  25.521us  cudaGetDevice
+  0.00%  12.865us         1  12.865us  12.865us  12.865us  cudaEventElapsedTime
+  0.00%  6.4050us         3  2.1350us     937ns  4.4790us  cuDeviceGetCount
+  0.00%  5.3650us         5  1.0730us     573ns  1.9790us  cudaSetupArgument
+  0.00%  5.3130us         1  5.3130us  5.3130us  5.3130us  cuDeviceTotalMem
+  0.00%  4.8440us         1  4.8440us  4.8440us  4.8440us  cudaConfigureCall
+  0.00%  1.9790us         3     659ns     469ns     833ns  cuDeviceGet
+  0.00%  1.1980us         1  1.1980us  1.1980us  1.1980us  cuDeviceGetName

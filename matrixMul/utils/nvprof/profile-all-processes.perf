@@ -1,0 +1,2 @@
+======== Error: nvprof doesn't accept application argument when "--profile-all-processes" is specified.
+======== Use "nvprof --help" to get more information.
