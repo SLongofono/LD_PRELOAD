@@ -1,3 +1,20 @@
+/*
+ *
+ * FILE		: custom_cuda.c
+ *
+ * BRIEF	: This files contains wrappers for some of the CUDA runtime
+ * 		  API rotuines. It should be compiled as a shared library and
+ * 		  used via LD_PRELOAD to capture calls to CUDA runtime API
+ * 		  invocations of a GPU application
+ *
+ * AUTHOR	: Waqar Ali (https://github.com/Skidro)
+ *
+ * ACKNOWLEDGEMENT
+ * The code in the following git repository was used to aid in this effort:
+ * https://github.com/nchong/cudahook
+ *
+ */
+
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -175,9 +192,9 @@ cudaError_t cudaDeviceSynchronize (void)
 	ret = orig_cudaDeviceSynchronize ();
 
 	/* Print the invocation message */
-	PRINT (SYNCH_CTL, std::cout << "Synchronization complete!\n");
+	PRINT (SYNCH_CTL, std::cout << "Device Synchronization complete!\n");
 
-	/* Call the original cuda synchronize function */
+	/* Return the API return value to the caller */
 	return ret;
 }
 
@@ -187,21 +204,28 @@ cudaError_t cudaDeviceSynchronize (void)
  * @stream		: Stream identifier
  * $cudaError_t		: Enumerated type specifying the CUDA error
  */
+extern "C"
 cudaError_t cudaStreamSynchronize (cudaStream_t stream)
 {
+	cudaError_t ret = cudaSuccess;
+
 	if (!orig_cudaStreamSynchronize) {
 		/* Get the pointer to the CUDA-defined stream synchronize
 		 * function */
 		orig_cudaStreamSynchronize = (cudaStreamSynchronize_t) dlsym (RTLD_NEXT, "cudaStreamSynchronize");
 	}
 
-	std::cout << "Stream Synch!\n";
-
 	/* Print the invocation message */
 	PRINT (STREAM_CTL, std::cout << "Synchronizing with the stream...\n");
 
 	/* Call the original cuda stream synchronization function */
-	return orig_cudaStreamSynchronize (stream);
+	ret = orig_cudaStreamSynchronize (stream);
+
+	/* Print the invocation message */
+	PRINT (STREAM_CTL, std::cout << "Stream Synchronization complete!\n");
+
+	/* Return the API return value to the caller */
+	return ret;
 }
 
 /*
@@ -210,21 +234,28 @@ cudaError_t cudaStreamSynchronize (cudaStream_t stream)
  * @event		: Event identifier
  * $cudaError_t		: Enumerated type specifying the CUDA error
  */
+extern "C"
 cudaError_t cudaEventSynchronize (cudaEvent_t event)
 {
+	cudaError_t ret = cudaSuccess;
+
 	if (!orig_cudaEventSynchronize) {
 		/* Get the pointer to the CUDA-defined event synchronization
 		 * function */
 		orig_cudaEventSynchronize = (cudaEventSynchronize_t) dlsym (RTLD_NEXT, "cudaEventSynchronize");
 	}
 
-	std::cout << "Event Synch!\n";
-
 	/* Print the invocation message */
 	PRINT (EVENT_CTL, std::cout << "Synchronizing with the event...\n");
 
 	/* Call the original cuda event synchronize function */
-	return orig_cudaEventSynchronize (event);
+	ret = orig_cudaEventSynchronize (event);
+
+	/* Print the invocation message */
+	PRINT (EVENT_CTL, std::cout << "Event Synchronization complete!\n");
+
+	/* Return the API return value to the caller */
+	return ret;
 }
 
 /*
